@@ -7,7 +7,7 @@ const Footer = () => {
       <Container>
         <Row>
           <Col md={4} className="mb-4 mb-md-0">
-            <h5>Mark's Psychiatry</h5>
+            <h5>Detangled Mind</h5>
             <p>
               Providing compassionate, evidence-based psychiatric care to help you achieve mental wellness and improved quality of life.
             </p>

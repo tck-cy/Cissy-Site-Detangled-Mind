@@ -1,28 +1,32 @@
-import React from 'react';
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import React from "react";
+import { Container, Row, Col, Card } from "react-bootstrap";
 
 const Services = () => {
   const services = [
     {
       title: "Psychiatric Evaluation",
-      description: "Comprehensive assessment to understand your mental health needs and develop a personalized treatment plan.",
-      icon: "bi bi-clipboard2-pulse"
+      description:
+        "Comprehensive assessment to understand your mental health needs and develop a personalized treatment plan.",
+      icon: "bi bi-clipboard2-pulse",
     },
     {
       title: "Medication Management",
-      description: "Careful monitoring and adjustment of medications to ensure optimal treatment outcomes.",
-      icon: "bi bi-capsule"
+      description:
+        "Careful monitoring and adjustment of medications to ensure optimal treatment outcomes.",
+      icon: "bi bi-capsule",
     },
     {
       title: "Psychotherapy",
-      description: "Evidence-based talk therapy approaches to help you work through challenges and improve mental wellbeing.",
-      icon: "bi bi-chat-square-text"
+      description:
+        "Evidence-based talk therapy approaches to help you work through challenges and improve mental wellbeing.",
+      icon: "bi bi-chat-square-text",
     },
     {
       title: "Anxiety & Depression Treatment",
-      description: "Specialized care for anxiety disorders, depression, and mood-related conditions.",
-      icon: "bi bi-emoji-frown"
-    }
+      description:
+        "Specialized care for anxiety disorders, depression, and mood-related conditions.",
+      icon: "bi bi-emoji-frown",
+    },
   ];
 
   return (

@@ -1,15 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter } from 'react-router-dom';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import "bootstrap/dist/css/bootstrap.min.css";
+import ErrorBoundary from "./components/ErrorBoundary";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+if (process.env.NODE_ENV === "development") {
+  window.__reactRouter__future__ = {
+    v7_startTransition: true,
+    v7_relativeSplatPath: true,
+  };
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <ErrorBoundary>
       <App />
-    </BrowserRouter>
+    </ErrorBoundary>
   </React.StrictMode>
 );
