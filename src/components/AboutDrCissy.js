@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Row, Col, Image, Button } from "react-bootstrap";
 import { FaGraduationCap, FaUserMd, FaAward, FaBook } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const AboutDrCissy = () => {
   return (
@@ -9,7 +10,7 @@ const AboutDrCissy = () => {
         <Row className="align-items-center">
           <Col md={6} className="mb-4 mb-md-0">
             <Image
-              src="/images/dr-cissy-profile.jpg" // Replace with actual image path
+              src="./yellow-stethoscope.jpg" // Replace with actual image path
               alt="Dr. Atwine Cissy"
               fluid
               rounded
@@ -68,7 +69,13 @@ const AboutDrCissy = () => {
               toward meaningful, lasting change.
             </p>
 
-            <Button variant="primary" size="lg" className="mt-3">
+            <Button
+              as={Link}
+              to="/BookAppointment"
+              variant="primary"
+              size="lg"
+              className="mt-3"
+            >
               Schedule a Consultation
             </Button>
           </Col>
@@ -135,7 +142,7 @@ const AboutDrCissy = () => {
           </Col>
           <Col md={6}>
             <Image
-              src="/images/dr-cissy-office.jpg" // Replace with actual image
+              src="/pro-headshot-2.jpg"
               alt="Dr. Cissy's office"
               fluid
               rounded

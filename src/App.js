@@ -6,6 +6,8 @@ import Home from "./components/Home";
 import AboutDrCissy from "./components/AboutDrCissy";
 import Contact from "./components/Contact";
 import YouTubeVideos from "./components/YouTubeVideos";
+import BookAppointment from "./components/BookAppointment";
+
 import "./App.css";
 
 function App() {
@@ -19,6 +21,7 @@ function App() {
             <Route path="/about" element={<AboutDrCissy />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/videos" element={<YouTubeVideos />} />
+            <Route path="/BookAppointment" element={<BookAppointment />} />
           </Routes>
         </main>
         <Footer />
