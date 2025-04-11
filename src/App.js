@@ -7,7 +7,7 @@ import AboutDrCissy from "./components/AboutDrCissy";
 import Contact from "./components/Contact";
 import YouTubeVideos from "./components/YouTubeVideos";
 import BookAppointment from "./components/BookAppointment";
-
+import Services from "./components/Services";
 import "./App.css";
 
 function App() {
@@ -20,6 +20,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<AboutDrCissy />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/services" element={<Services />} />
             <Route path="/videos" element={<YouTubeVideos />} />
             <Route path="/BookAppointment" element={<BookAppointment />} />
           </Routes>

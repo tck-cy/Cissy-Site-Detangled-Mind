@@ -21,6 +21,9 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
+  
+  "proxy": "https://3a9e-102-209-109-14.ngrok-free.app",
+
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -51,4 +54,6 @@
     "eslint-plugin-react": "^7.37.5",
     "prettier": "^3.5.3"
   }
+
 }
+

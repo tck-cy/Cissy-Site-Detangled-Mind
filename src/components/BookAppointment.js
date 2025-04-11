@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
 import { loadStripe } from "@stripe/stripe-js";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from "axios";
+import api from "../config/api.js";
 
 const BookAppointment = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,15 @@ const BookAppointment = () => {
     service: "therapy",
     paymentMethod: "credit-card",
   });
+
+  //backend-debugging
+  useEffect(() => {
+    axios
+      .get(api.checkAvailability)
+      .then((res) => console.log("Backend connection successful"))
+      .catch((err) => console.error("Connection failed:", err));
+  }, []);
+
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
