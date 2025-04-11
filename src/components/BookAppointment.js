@@ -31,12 +31,15 @@ const BookAppointment = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Update the handleSubmit function
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
+
     try {
-      // Check availability
-      const availabilityResponse = await axios.post("/api/check-availability", {
+      // 1. First check availability
+      const availabilityResponse = await axios.post(api.checkAvailability, {
         date: formData.date,
         time: formData.time,
       });
@@ -45,23 +48,29 @@ const BookAppointment = () => {
         throw new Error("Selected time slot is not available");
       }
 
-      // Only handle form submission for credit card (PayPal handles its own flow)
-      if (formData.paymentMethod === "credit-card") {
-        const stripe = await loadStripe(
-          process.env.REACT_APP_STRIPE_PUBLIC_KEY
-        );
-        await stripe.redirectToCheckout({
-          lineItems: [
-            { price: process.env.REACT_APP_STRIPE_PRICE_ID, quantity: 1 },
-          ],
-          mode: "payment",
-          successUrl: `${window.location.origin}/booking-success?session_id={CHECKOUT_SESSION_ID}`,
-          cancelUrl: `${window.location.origin}/booking-canceled`,
-        });
+      // 2. Create a booking record in your backend
+      const bookingResponse = await axios.post(api.bookAppointment, {
+        ...formData,
+        paymentMethod: "credit-card",
+        paymentStatus: "pending", // Mark as pending until payment completes
+      });
+
+      // 3. Only then proceed with Stripe payment
+      const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+      const { error } = await stripe.redirectToCheckout({
+        lineItems: [
+          { price: process.env.REACT_APP_STRIPE_PRICE_ID, quantity: 1 },
+        ],
+        mode: "payment",
+        successUrl: `${window.location.origin}/booking-success?session_id={CHECKOUT_SESSION_ID}&bookingId=${bookingResponse.data.bookingId}`,
+        cancelUrl: `${window.location.origin}/booking-canceled?bookingId=${bookingResponse.data.bookingId}`,
+      });
+
+      if (error) {
+        throw error;
       }
     } catch (err) {
       setError(err.message);
-    } finally {
       setLoading(false);
     }
   };
@@ -126,8 +135,8 @@ const BookAppointment = () => {
                 name="time"
                 value={formData.time}
                 onChange={handleChange}
-                min="09:00"
-                max="17:00"
+                // min="09:00"
+                // max="17:00"
                 required
               />
             </Form.Group>
@@ -180,26 +189,52 @@ const BookAppointment = () => {
               options={{ "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID }}
             >
               <PayPalButtons
-                createOrder={(data, actions) => {
-                  return actions.order.create({
-                    purchase_units: [
+                createOrder={async (data, actions) => {
+                  try {
+                    // First check availability
+                    const availabilityResponse = await axios.post(
+                      api.checkAvailability,
                       {
-                        amount: {
-                          value: "100.00", // Set your price here
+                        date: formData.date,
+                        time: formData.time,
+                      }
+                    );
+
+                    if (!availabilityResponse.data.available) {
+                      throw new Error("Selected time slot is not available");
+                    }
+
+                    return actions.order.create({
+                      purchase_units: [
+                        {
+                          amount: {
+                            value: "100.00",
+                            currency_code: "USD",
+                          },
                         },
-                      },
-                    ],
-                  });
+                      ],
+                    });
+                  } catch (err) {
+                    setError(err.message);
+                    throw err;
+                  }
                 }}
                 onApprove={async (data, actions) => {
-                  const details = await actions.order.capture();
-                  // Handle successful payment
-                  await axios.post("/api/book-appointment", {
-                    ...formData,
-                    paymentId: details.id,
-                    paymentMethod: "paypal",
-                  });
-                  setSuccess(true);
+                  try {
+                    const details = await actions.order.capture();
+                    await axios.post(api.bookAppointment, {
+                      ...formData,
+                      paymentId: details.id,
+                      paymentMethod: "paypal",
+                      paymentStatus: "completed",
+                    });
+                    setSuccess(true);
+                  } catch (err) {
+                    setError(err.response?.data?.error || err.message);
+                  }
+                }}
+                onError={(err) => {
+                  setError(err.message || "Payment failed");
                 }}
               />
             </PayPalScriptProvider>
